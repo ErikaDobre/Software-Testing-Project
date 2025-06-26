@@ -1,0 +1,101 @@
+
+#include <stdio.h>
+ // MISRA: Evită directivele de preprocesare. Folosește const pentru valori constante.
+#define NR 10
+
+int f(int v[], int, int, int);
+void sortAsc(int v[], int n);
+void sortDesc(int v[], int n);
+
+// MISRA: Funcția main trebuie să returneze întotdeauna int și să aibă "void" ca parametru.
+int main(void) 
+{
+    int n, i, x, poz;
+    int v[NR];
+    
+    printf("nr de elemente din vector = ");
+// MISRA: scanf returnează o valoare care trebuie capturată, folosește conversia explicită (void).
+    (void)scanf("%d", &n); 
+
+    for (i = 0; i < n; ++i) {
+        printf("v[%d] = ", i);
+// MISRA: La fel ca mai sus, trebuie capturată valoarea returnată de scanf.
+        (void)scanf("%d", &v[i]); 
+    }
+    
+    printf("valoarea cautata = ");
+// MISRA: Conversie explicită a valorii returnate de scanf.
+    (void)scanf("%d", &x); 
+
+    // Sortare crescătoare și căutare binară
+    sortAsc(v, n);
+    printf("\nVector sortat crescator:\n");
+    for (i = 0; i < n; ++i) {
+        printf("%d ", v[i]);
+    }
+    
+    poz = f(v, 0, n - 1, x);
+    if (poz == -1)
+        printf("\nNu exista valoarea cautata in vector.\n");
+    else
+        printf("\nPozitia = %d\n", poz);
+    
+    // Sortare descrescătoare
+    sortDesc(v, n);
+    printf("\nVector sortat descrescator:\n");
+    for (i = 0; i < n; ++i) {
+        printf("%d ", v[i]);
+    }
+    printf("\n");
+    
+    return 0;
+}
+
+int f(int v[], int p1, int p2, int x)
+{
+    int mijloc;
+    if (p1 > p2)
+        return -1;
+    else {
+// MISRA: Folosește paranteze suplimentare pentru a clarifica ordinea operațiilor.
+        mijloc = (p1 + p2) / 2; 
+        if (v[mijloc] == x)
+            return mijloc;
+        else if (x < v[mijloc])
+            return f(v, p1, mijloc - 1, x);
+        else
+            return f(v, mijloc + 1, p2, x);
+    }
+}
+
+// Funcție de sortare crescătoare
+void sortAsc(int v[], int n)
+{
+    int i, j, temp;
+    for (i = 0; i < n - 1; i++) {
+        for (j = i + 1; j < n; j++) {
+            if (v[i] > v[j]) {
+                temp = v[i];
+                v[i] = v[j];
+// MISRA: Accesul și schimbul între elemente ar trebui efectuate cu funcții dedicate dacă sunt disponibile.
+                v[j] = temp; 
+            }
+        }
+    }
+}
+
+// Funcție de sortare descrescătoare
+void sortDesc(int v[], int n)
+{
+    int i, j, temp;
+    for (i = 0; i < n - 1; i++) {
+        for (j = i + 1; j < n; j++) {
+            if (v[i] < v[j]) {
+                temp = v[i];
+                v[i] = v[j];
+// MISRA: Accesul și schimbul între elemente ar trebui efectuate cu funcții dedicate dacă sunt disponibile.
+                v[j] = temp; 
+            }
+        }
+    }
+}
